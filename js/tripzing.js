@@ -7,8 +7,8 @@ var IN_DEBUG_MODE = true;
 var DEBUG_TO_SCREEN = true;
 
 var MESSAGE_PROPERTIES = {
-    "messageType": "MESSAGE_TYPE",
-    "userId": "USERID"
+    "messageType" : "MESSAGE_TYPE",
+    "userId" : "USERID"
 };
 
 // WebSocket and JMS variables
@@ -45,10 +45,11 @@ var handleTopicMessage = function(message) {
     }
 };
 
-var doSend = function(message) {
+var doSend = function(message, callback) {
     message.setStringProperty(MESSAGE_PROPERTIES.userId, userId);
     topicProducer.send(null, message, DeliveryMode.NON_PERSISTENT, 3, 1, function() {
         consoleLog("Message sent: " + message.getText());
+        callback();
     });
 };
 
@@ -79,12 +80,10 @@ var doConnect = function() {
 
                     topicConsumer.setMessageListener(handleTopicMessage);
 
-                    
                     connection.start(function() {
                         // Put any callback logic here.
                         //
                         consoleLog("JMS session created");
-                        doSend(session.createTextMessage("Hello world..."));
                     });
                 } catch (e) {
                     handleException(e);
@@ -97,3 +96,24 @@ var doConnect = function() {
         handleException(e);
     }
 };
+
+var simulateTrip = function(loc) {
+    var zion = [[37.212473, -112.957156], [37.212438, -112.956233], [37.212063, -112.956061], [37.212045, -112.956769], [37.212182, -112.957542], [37.212302, -112.958336], [37.212336, -112.959216], [37.212421, -112.960010]];
+    var bryce = [[37.603760, -112.167320], [37.606208, -112.169724], [37.609472, -112.171698], [37.610152, -112.172813], [37.612260, -112.174444], [37.613721, -112.175388], [37.615489, -112.175388]];
+    var locArr = eval(loc);
+    var index = -1;
+    
+    function send() {
+        index++;
+        if (index == locArr.length - 1) {
+            return;
+        }
+        locMsg = locArr[index][0] + "," + locArr[index][1];
+        var message = session.createTextMessage(locMsg);
+        setTimeout(function() {
+            doSend(message, send);
+        }, 2000);
+    }
+    send();
+};
+
