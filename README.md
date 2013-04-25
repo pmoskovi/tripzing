@@ -21,6 +21,10 @@ trip with her, so she can follow you on her computer screen. In this case it’s
   other; your friend is on a smartphone, you’re using the navigation system of your car.
 * Car caravan: You’re on a road trip with friends; a caravan of two or more cars. You
  want to know where the other car is, and want to share your location with the other
+<<<<<<< HEAD
   car, in case you loose each other.
 
 For more information, check out our blog post on the proejct: http://blog.kaazing.com/?p=2301.
+=======
+  car, in case you loose each other.
+>>>>>>> Updated Readm.md.
