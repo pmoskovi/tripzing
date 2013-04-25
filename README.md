@@ -24,3 +24,5 @@ trip with her, so she can follow you on her computer screen. In this case it’s
   car, in case you loose each other.
 
 For more information, check out our blog post on the proejct: http://blog.kaazing.com/?p=2301.
+
+You can watch the end-result here: https://vimeo.com/64685584
