@@ -5,6 +5,7 @@ var TOPIC_NAME = "/topic/tripzing";
 var TW_TOPIC = "/topic/twillio";
 var IN_DEBUG_MODE = true;
 var DEBUG_TO_SCREEN = true;
+var messageHandler;
 
 var MESSAGE_PROPERTIES = {
     "messageType" : "MESSAGE_TYPE",
@@ -40,12 +41,10 @@ var handleException = function(e) {
 };
 
 var handleTopicMessage = function(message) {
-    if (message.getStringProperty(MESSAGE_PROPERTIES.userId) != userId) {
-        consoleLog("Message received: " + message.getText());
-    }
+    messageHandler(message.getText(), message.getStringProperty(MESSAGE_PROPERTIES.userId));
 };
 
-var doSend = function(message, callback) {
+var doSend = function(message, callback, userId) {
     message.setStringProperty(MESSAGE_PROPERTIES.userId, userId);
     topicProducer.send(null, message, DeliveryMode.NON_PERSISTENT, 3, 1, function() {
         consoleLog("Message sent: " + message.getText());
@@ -55,7 +54,8 @@ var doSend = function(message, callback) {
 
 // Connecting...
 //
-var doConnect = function() {
+var doConnect = function(callback) {
+    messageHandler = callback;
     // Connect to JMS, create a session and start it.
     //
     var stompConnectionFactory = new StompConnectionFactory(WEBSOCKET_URL);
@@ -112,7 +112,7 @@ var simulateTrip = function(loc) {
         locMsg = locArr[index][0] + "," + locArr[index][1];
         var message = session.createTextMessage(locMsg);
         setTimeout(function() {
-            doSend(message, send);
+            doSend(message, send, loc);
         }, 2000);
     }
     send();

@@ -14,11 +14,11 @@
 <script src="/lib/client/javascript/StompJms.js">
 </script>
 
-<script src="./js/tripzing.js">
+<script src="tripzing.js">
 </script>
 
 <div id="mapContainer"
-	style="width: 320px; height: 480px; position: relative;">
+	style="width: 768px; height: 1024px; position: relative;">
 </div>
 
 <script>
@@ -44,6 +44,11 @@
 			schema: "normal.day.traffic"
 		});
 		document.getElementById("mapContainer").appendChild(map.root);
+		/*var poi = map.createPoi("bryce.png",currentPosition.coords);
+		setTimeout(function(){
+			map.removePoi(poi);
+		}, 2000);*/
+
 		var pois = {};
 		doConnect(function(message, userId){
 			var currentPoi = pois[userId];
@@ -56,7 +61,7 @@
 				longitude:coords[1],
 				latitude:coords[0]
 			};
-			currentPoi = map.createPoi("./img/" + userId + ".png",coordinate);
+			currentPoi = map.createPoi(userId + ".png",coordinate);
 			pois[userId] = currentPoi;
 			if (!map.covers([coordinate])) {
 				map.moveTo(coordinate);
